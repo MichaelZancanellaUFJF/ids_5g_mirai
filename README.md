@@ -11,7 +11,7 @@ O projeto implementa e valida um Sistema de Deteção de Intrusões (IDS) basead
 
 A validação prática foi realizada em um testbed 5G funcional, utilizando **Open5GS** para o Core da rede e **UERANSIM** para a emulação do equipamento de utilizador (UE) e da estação rádio-base (gNB).
 
-![Arquitetura do Projeto](figures/arquitetura_detalhada.pdf)
+![Arquitetura do Projeto](figures/arquitetura_detalhada.png)
 
 
 ## Estrutura do Repositório
