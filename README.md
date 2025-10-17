@@ -81,6 +81,23 @@ The practical validation was conducted in a functional 5G testbed using **Open5G
        python scripts/02_extracao_features/sniffer.py /path/to/captured_pcap.pcap
        ```
 
+
+
+## Third-party tools and dataset generation
+
+The `pcap2csv` tool used in this project is provided by the **Canadian Institute for Cybersecurity (CIC)** and was obtained from the dataset-generating paper that produced the dataset used to train the models. When reproducing the experiments, please consult the original CIC publication and repository for details on `pcap2csv`, its usage, and licensing requirements.
+
+## Virtual Machine Specifications
+
+The testbed was deployed on three virtual machines (VMs) running on Oracle VM VirtualBox. The specifications used during the experiments are listed below:
+
+| Component | Specification |
+|---:|---|
+| **VM 1: IDS Server** | **Role:** Data analysis, inference API (Fog), InfluxDB, Grafana<br>**IP address:** `10.0.0.10`<br>**OS:** Debian (64-bit)<br>**RAM:** 6937 MB<br>**Storage (HD):** 80 GB |
+| **VM 2: 5G Core / Collector** | **Role:** 5G Core (Open5GS), capture and feature extraction<br>**IP address:** `10.0.0.12`<br>**OS:** Ubuntu (64-bit)<br>**RAM:** 2048 MB<br>**Storage (HD):** 50 GB |
+| **VM 3: Client / Attacker** | **Role:** 5G Client (UERANSIM), traffic generation<br>**IP address:** `10.0.0.11`<br>**OS:** Ubuntu (64-bit)<br>**RAM:** 2048 MB<br>**Storage (HD):** 50 GB |
+
+
 ## Results
 
 The results demonstrated that both Random Forest and LightGBM models achieved **very high effectiveness** in detecting Mirai attacks, with **F1-Scores above 97%**.  
