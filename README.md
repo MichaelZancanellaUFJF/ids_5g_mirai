@@ -1,99 +1,101 @@
-# Aprendizado de Máquina para Detecção de Ataques Mirai em Redes IoT 5G
+# Machine Learning for Detecting Mirai Attacks in 5G IoT Networks
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-Este repositório contém o código-fonte, os scripts e os materiais de suporte para a dissertação de Mestrado intitulada **"Aprendizado de máquina para detecção de ataques Mirai em redes IoT 5G"**, desenvolvida no Programa de Pós-Graduação em Ciência da Computação da Universidade Federal de Juiz de Fora (UFJF).
+This repository contains the source code, scripts, and supporting materials for the Master’s dissertation entitled **"Machine Learning for Detecting Mirai Attacks in 5G IoT Networks"**, developed in the Graduate Program in Computer Science at the Federal University of Juiz de Fora (UFJF), Brazil.
 
-## Visão Geral
+## Overview
 
-O projeto implementa e valida um Sistema de Deteção de Intrusões (IDS) baseado em fluxos para redes IoT habilitadas por 5G, com foco na identificação de variantes do malware Mirai (GRE-IP, GRE-ETH e UDP Plain). A solução propõe uma arquitetura distribuída **Edge-Fog-Cloud**, inspirada na função NWDAF do 5G, onde a inferência com modelos de Machine Learning (Random Forest e LightGBM) é realizada em tempo real na camada Fog para garantir baixa latência.
+The project implements and validates a **flow-based Intrusion Detection System (IDS)** for 5G-enabled IoT networks, focusing on identifying variants of the **Mirai malware** (GRE-IP, GRE-ETH, and UDP Plain).  
+The proposed solution introduces a **distributed Edge-Fog-Cloud architecture**, inspired by the **5G NWDAF function**, where real-time inference with **Machine Learning models (Random Forest and LightGBM)** is performed at the Fog layer to ensure low latency.
 
-A validação prática foi realizada em um testbed 5G funcional, utilizando **Open5GS** para o Core da rede e **UERANSIM** para a emulação do equipamento de utilizador (UE) e da estação rádio-base (gNB).
+The practical validation was conducted in a functional 5G testbed using **Open5GS** for the Core network and **UERANSIM** to emulate both the User Equipment (UE) and the base station (gNB).
 
-![Arquitetura do Projeto](figures/arquitetura_detalhada.png)
+![Project Architecture](figures/arquitetura_detalhada.png)
 
+## Repository Structure
 
-## Estrutura do Repositório
+- **/data/**: Should contain the datasets. This folder is ignored by `.gitignore`, but the expected structure is `raw/` for `.pcap` captures and `processed/` for the generated `.csv` files.
+- **/notebooks/**: Contains the Jupyter Notebook (`analise_e_treinamento.ipynb`) with the entire process of data analysis, model training, and evaluation.
+- **/models/**: Contains the trained `.pkl` files for the Random Forest and LightGBM models (ignored by `.gitignore`).
+- **/scripts/**: Python and Shell scripts for different project stages.
+  - `01_captura_trafego/`: Continuous network traffic capture script.
+  - `02_extracao_features/`: Scripts to convert PCAP files to CSV and send data to the analysis API.
+  - `03_geracao_trafego/`: Scripts to simulate benign traffic and the three Mirai attack variants.
+- **/server_ids/**: Source code for the inference server (`app.py`) implemented using Flask.
+- **/testbed_config/**: Configuration files (`.yaml`) for the 5G environment (Open5GS and UERANSIM), essential for reproducibility.
+- **/figures/**: High-quality figures and charts used in the dissertation.
+- `requirements.txt`: List of all Python dependencies required to run the project.
 
-- **/data/**: Deve conter os datasets. Esta pasta é ignorada pelo `.gitignore`, mas a estrutura esperada é `raw/` para capturas `.pcap` e `processed/` para os `.csv` gerados.
-- **/notebooks/**: Contém o Jupyter Notebook (`analise_e_treinamento.ipynb`) com todo o processo de análise de dados, treinamento e avaliação dos modelos.
-- **/models/**: Contém os ficheiros `.pkl` dos modelos Random Forest e LightGBM já treinados. Ignorado pelo `.gitignore`.
-- **/scripts/**: Scripts Python e Shell para as diferentes etapas do projeto.
-  - `01_captura_trafego/`: Script para captura contínua de tráfego de rede.
-  - `02_extracao_features/`: Scripts para converter PCAP em CSV e para enviar os dados para a API de análise.
-  - `03_geracao_trafego/`: Scripts para simular o tráfego benigno e as três variantes de ataque Mirai.
-- **/server_ids/**: Código-fonte do servidor de inferência (`app.py`) implementado com Flask.
-- **/testbed_config/**: Ficheiros de configuração (`.yaml`) para o ambiente 5G (Open5GS e UERANSIM), essenciais para a reprodutibilidade.
-- **/figures/**: Figuras e gráficos de alta qualidade utilizados na dissertação.
-- `requirements.txt`: A lista de todas as dependências Python necessárias para executar o projeto.
+## How to Reproduce the Experiment
 
-## Como Reproduzir o Experimento
+### Prerequisites
 
-### Pré-requisitos
+- Virtualization environment (e.g., VirtualBox) with three configured VMs.  
+- Python 3.8+ and `pip`.  
+- Git.  
+- Open5GS and UERANSIM installed and configured on their respective VMs.  
+- Knowledge of network interface configuration on VMs.
 
-- Ambiente de virtualização (ex: VirtualBox) com 3 VMs configuradas.
-- Python 3.8+ e `pip`.
-- Git.
-- Open5GS e UERANSIM instalados e configurados nas respetivas VMs.
-- Conhecimento para configurar as interfaces de rede das VMs.
+### Steps
 
-### Passos
-
-1.  **Clone o repositório:**
+1. **Clone the repository:**
     ```bash
-    git clone [https://github.com/](https://github.com/)[SEU-USUARIO]/dissertacao-ids-5g-mirai.git
+    git clone https://github.com/[YOUR-USERNAME]/dissertacao-ids-5g-mirai.git
     cd dissertacao-ids-5g-mirai
     ```
 
-2.  **Instale as dependências Python:**
-    É recomendado criar um ambiente virtual primeiro.
+2. **Install Python dependencies:**
+    It is recommended to create a virtual environment first.
     ```bash
     python -m venv venv
-    source venv/bin/activate  # No Linux/macOS
-    # venv\Scripts\activate    # No Windows
+    source venv/bin/activate  # On Linux/macOS
+    # venv\Scripts\activate    # On Windows
 
     pip install -r requirements.txt
     ```
 
-3.  **Configuração do Testbed 5G:**
-    - Utilize os ficheiros de configuração em `/testbed_config/` para configurar o Open5GS (nas VMs do Core e UPF) e o UERANSIM (na VM do Cliente).
+3. **5G Testbed Configuration:**
+    - Use the configuration files in `/testbed_config/` to set up Open5GS (for the Core and UPF VMs) and UERANSIM (for the Client VM).
 
-4.  **Treinamento dos Modelos (Opcional):**
-    - Para treinar os modelos do zero, execute o Jupyter Notebook `notebooks/analise_e_treinamento.ipynb`. Os modelos já treinados estão disponíveis na pasta `/models/`.
+4. **Model Training (Optional):**
+    - To train models from scratch, run the Jupyter Notebook `notebooks/analise_e_treinamento.ipynb`.  
+      Pre-trained models are available in the `/models/` folder.
 
-5.  **Execução do Pipeline de Deteção:**
-    a. Na **VM do Servidor IDS**, inicie a API de inferência:
+5. **Running the Detection Pipeline:**
+    a. On the **IDS Server VM**, start the inference API:
        ```bash
        python server_ids/app.py
        ```
-    b. Na **VM do Core 5G**, inicie a captura de tráfego na interface `ogstun`:
+    b. On the **5G Core VM**, start traffic capture on the `ogstun` interface:
        ```bash
        sudo ./scripts/01_captura_trafego/detect_loop.sh
        ```
-    c. Na **VM do Cliente**, execute um dos scripts de geração de tráfego para simular um ataque:
+    c. On the **Client VM**, run one of the traffic generation scripts to simulate an attack:
        ```bash
        sudo python scripts/03_geracao_trafego/attack_GRE_IP.py
        ```
-    d. Após a captura, processe o ficheiro `.pcap` gerado para obter a classificação:
+    d. After the capture, process the generated `.pcap` file for classification:
        ```bash
-       python scripts/02_extracao_features/sniffer.py /caminho/para/o/pcap_capturado.pcap
+       python scripts/02_extracao_features/sniffer.py /path/to/captured_pcap.pcap
        ```
 
-## Resultados
+## Results
 
-Os resultados demonstraram que ambos os modelos, Random Forest e LightGBM, alcançaram altíssima eficácia na deteção dos ataques Mirai, com F1-Score superior a 97%. No entanto, o LightGBM provou ser significativamente mais eficiente, com uma latência de inferência média quase 8 vezes menor, tornando-o a escolha ideal para uma implementação em tempo real em ambientes com recursos limitados, como a camada de Fog.
+The results demonstrated that both Random Forest and LightGBM models achieved **very high effectiveness** in detecting Mirai attacks, with **F1-Scores above 97%**.  
+However, LightGBM proved to be significantly more efficient, with an **average inference latency nearly 8× lower**, making it the ideal choice for real-time implementation in resource-constrained environments such as the Fog layer.
 
-Para uma análise detalhada, consulte a dissertação.
+For detailed analysis, please refer to the dissertation.
 
-## Citação
+## Citation
 
-Se este trabalho for útil para a sua pesquisa, por favor, cite-o da seguinte forma:
+If this work contributes to your research, please cite it as follows:
 
 ```
-Barboza, M. V. Z. (2026). Aprendizado de máquina para detecção de ataques Mirai em redes IoT 5G. [Dissertação de Mestrado, Universidade Federal de Juiz de Fora].
+Barboza, M. V. Z. (2026). Machine Learning for Detecting Mirai Attacks in 5G IoT Networks. [Master’s Dissertation, Federal University of Juiz de Fora].
 ```
 
-## Licença
+## License
 
-Este projeto está licenciado sob a Licença MIT. Veja o ficheiro `LICENSE` para mais detalhes.
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
